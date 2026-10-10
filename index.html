@@ -1,102 +1,48 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Запись</title>
-	    <!-- Насильно прячем строку браузера на Android и iPhone при запуске с ярлыка -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-    <style>
-                 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f1f5f9; margin: 0; padding-bottom: 48px; color: #334155; }
-        
-        /* Глубокий, но спокойный черничный цвет для шапки */
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f1f5f9; margin: 0; padding-bottom: 48px; color: #334155; }
         header { background-color: #4a4e69; color: white; padding: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; }
         header h1 { margin: 0; font-size: 20px; font-weight: bold; }
-        
-        /* Сдержанные кнопки в шапке */
         .btn-top { background-color: #70748c; border: none; color: white; padding: 6px 12px; font-size: 12px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: 0.2s; }
         .btn-top:hover { background-color: #585c74; }
         main { max-width: 440px; margin: 0 auto; padding: 16px; box-sizing: border-box; }
-        
         .tabs-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
         .tab-btn { background: #e2e8f0; border: none; padding: 12px; font-size: 14px; font-weight: 700; color: #4a4e69; border-radius: 8px; cursor: pointer; transition: 0.2s; }
-        
-        /* Активная черничная вкладка */
         .tab-btn.active { background: #4a4e69; color: white; box-shadow: 0 2px 8px rgba(74, 78, 105, 0.2); }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        
         section { background: white; padding: 16px; border-radius: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); border: 1px solid #e2e8f0; margin-bottom: 24px; }
         h2 { margin-top: 0; margin-bottom: 12px; font-size: 17px; color: #222538; font-weight: 700; }
         .form-group { margin-bottom: 12px; }
         label { display: block; font-size: 12px; font-weight: 700; color: #4a4e69; margin-bottom: 4px; }
-        input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; box-sizing: border-box; background-color: #fff; height: 40px; color: #334155; }
-        input:focus { outline: none; border-color: #70748c; box-shadow: 0 0 0 3px rgba(112, 116, 140, 0.15); }
-        
+        input, select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; box-sizing: border-box; background-color: #fff; height: 40px; color: #334155; }
+        input:focus, select:focus { outline: none; border-color: #70748c; box-shadow: 0 0 0 3px rgba(112, 116, 140, 0.15); }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .grid-3 { display: grid; grid-template-columns: 2fr 1fr; gap: 8px; }
-        
+        .grid-3 { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 8px; }
         .btn-main { width: 100%; background: #4a4e69; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 8px; }
         .btn-main:hover { background: #3d4053; }
-        
         .card { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f8fafc; border-radius: 12px; border: 1px solid #f1f5f9; margin-bottom: 8px; }
-        
-        /* Бейджи дат в списке */
         .badge { background: #f0f1f5; color: #4a4e69; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 9999px; margin-right: 6px; }
         .client-name { font-weight: 600; font-size: 14px; color: #1e293b; }
         .service-name { font-size: 12px; color: #64748b; margin: 4px 0 0 0; }
         .price { font-weight: 700; font-size: 14px; color: #334151; margin-right: 12px; }
         .btn-del { background: none; border: none; color: #cbd5e1; font-size: 18px; cursor: pointer; padding: 0 4px; }
         .btn-del:hover { color: #f43f5e; }
-        
-        /* Спокойная сетка календаря */
         .cal-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
         .cal-table th { padding: 6px 0; font-size: 12px; color: #64748b; text-align: center; font-weight: 700; }
         .cal-cell { height: 42px; vertical-align: middle; text-align: center; border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 4px; cursor: pointer; box-sizing: border-box; position: relative; }
         .cal-cell:hover { background: #f1f5f9; border-color: #4a4e69; }
         .cal-cell.empty { background: transparent; border: none; cursor: default; }
-        
-        /* Подсветка дней */
         .cal-cell.today { border: 2px solid #4a4e69; background: #f0f1f5; }
         .cal-cell.selected-day { border: 2px dashed #70748c; background: #fafafc; }
-        
-        /* Маркер записи */
         .cal-day-indicator { width: 6px; height: 6px; background-color: #70748c; border-radius: 50%; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-
-</style>
-	    <!-- Связываем приложение с файлом настроек офлайна -->
-    <link rel="manifest" href="manifest.json">
-    
-    <script>
-        // Регистрируем офлайн-менеджер (Service Worker)
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-                .then(() => console.log('Офлайн-режим готов!'))
-                .catch(err => console.error('Ошибка офлайна:', err));
-        }
-    </script>
-
-</head>
-<body>
-    <!-- ИСПРАВЛЕННАЯ ШАПКА: Все кнопки в один ряд в правом углу -->
-    <header>
-        <h1>📅 Запись</h1>
-        <div style="display: flex; gap: 6px; align-items: center;">
-            <button onclick="exportData()" class="btn-top">Бэкап</button>
-            <!-- Зелёная кнопка Excel теперь аккуратно стоит здесь -->
-            <button onclick="exportToExcel()" class="btn-top" style="background-color: #107c41;">Excel</button>
-            <button onclick="document.getElementById('importFile').click()" class="btn-top">Загрузить</button>
-            <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
-        </div>
-    </header>
-
-
-        <main>
-        <!-- КНОПКИ ПЕРЕКЛЮЧЕНИЯ ВКЛАДОК -->
+        
+        /* Стили кассы и чекбоксов */
+        .cash-box { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0; text-align: center; }
+        .cash-title { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 2px; }
+        .cash-value { font-size: 15px; font-weight: 800; color: #334155; }
+        .cash-value.done { color: #16a34a; }
+        .checkbox-custom { width: 18px; height: 18px; cursor: pointer; accent-color: #16a34a; }
+    <main>
         <div class="tabs-nav">
             <button class="tab-btn active" id="btnTabCal" onclick="switchTab('calendar')">📅 Календарь</button>
             <button class="tab-btn" id="btnTabForm" onclick="switchTab('form')">✨ Новая запись</button>
@@ -117,20 +63,31 @@
                             <th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th>
                         </tr>
                     </thead>
-                    <tbody id="calendarTableBody">
-                        <!-- Сюда JS вставит дни -->
-                    </tbody>
+                    <tbody id="calendarTableBody"></tbody>
                 </table>
             </section>
 
-            <!-- Почасовой план отображается ТОЛЬКО здесь, прямо под сеткой -->
+            <!-- Почасовой план и Счётчик кассы за день -->
             <section id="dayScheduleSection" style="display: none;">
-                <h2 id="dayScheduleTitle" style="font-size: 16px; color: #4a4e69; margin-bottom: 12px; font-weight: bold;"></h2>
+                <h2 id="dayScheduleTitle" style="font-size: 16px; color: #4a4e69; margin-bottom: 8px; font-weight: bold;"></h2>
+                
+                <!-- Виджет доходов за выбранные сутки -->
+                <div class="cash-box">
+                    <div>
+                        <div class="cash-title">Ожидается</div>
+                        <div id="cashForecast" class="cash-value">0 ₽</div>
+                    </div>
+                    <div>
+                        <div class="cash-title">Заработано</div>
+                        <div id="cashDone" class="cash-value done">0 ₽</div>
+                    </div>
+                </div>
+
                 <div id="dayHoursList" style="display: flex; flex-direction: column; gap: 8px;"></div>
             </section>
         </div>
 
-        <!-- ВКЛАДКА 2: ФОРМА И ОБЩИЙ СПИСОК -->
+        <!-- ВКЛАДКА 2: ФОРМА -->
         <div id="tabForm" class="tab-content">
             <section>
                 <h2>Новая запись</h2>
@@ -171,6 +128,17 @@
                             <input type="text" id="appService" required placeholder="">
                         </div>
                         <div>
+                            <label>Время (мин)</label>
+                            <select id="appDuration" required>
+                                <option value="30">30 мин</option>
+                                <option value="60" selected>1 час</option>
+                                <option value="90">1.5 часа</option>
+                                <option value="120">2 часа</option>
+                                <option value="150">2.5 часа</option>
+                                <option value="180">3 часа</option>
+                            </select>
+                        </div>
+                        <div>
                             <label>Цена (₽)</label>
                             <input type="text" id="appPrice" required placeholder="0" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g, '')">
                         </div>
@@ -179,17 +147,128 @@
                 </form>
             </section>
 
-            <!-- Лента всех ближайших записей переехала сюда, под форму -->
             <section>
-                <h2>Ближайшие записи</h2>
+                <h2>План на 10 дней</h2>
                 <div id="appointmentsList">
                     <p style="text-align:center; color:#9ca3af; font-size:14px; padding:16px 0;">Записей пока нет</p>
                 </div>
             </section>
         </div>
     </main>
+    <main>
+        <div class="tabs-nav">
+            <button class="tab-btn active" id="btnTabCal" onclick="switchTab('calendar')">📅 Календарь</button>
+            <button class="tab-btn" id="btnTabForm" onclick="switchTab('form')">✨ Новая запись</button>
+        </div>
 
-       <script>
+        <!-- ВКЛАДКА 1: КАЛЕНДАРЬ -->
+        <div id="tabCalendar" class="tab-content active">
+            <section style="padding: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <button onclick="changeMonth(-1)" class="btn-top" style="padding: 4px 10px;">◀</button>
+                    <h3 id="calendarMonthTitle" style="margin: 0; font-size: 15px; font-weight: bold; color: #1f2937;"></h3>
+                    <button onclick="changeMonth(1)" class="btn-top" style="padding: 4px 10px;">▶</button>
+                </div>
+                
+                <table class="cal-table">
+                    <thead>
+                        <tr>
+                            <th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th>
+                        </tr>
+                    </thead>
+                    <tbody id="calendarTableBody"></tbody>
+                </table>
+            </section>
+
+            <!-- Почасовой план и Счётчик кассы за день -->
+            <section id="dayScheduleSection" style="display: none;">
+                <h2 id="dayScheduleTitle" style="font-size: 16px; color: #4a4e69; margin-bottom: 8px; font-weight: bold;"></h2>
+                
+                <!-- Виджет доходов за выбранные сутки -->
+                <div class="cash-box">
+                    <div>
+                        <div class="cash-title">Ожидается</div>
+                        <div id="cashForecast" class="cash-value">0 ₽</div>
+                    </div>
+                    <div>
+                        <div class="cash-title">Заработано</div>
+                        <div id="cashDone" class="cash-value done">0 ₽</div>
+                    </div>
+                </div>
+
+                <div id="dayHoursList" style="display: flex; flex-direction: column; gap: 8px;"></div>
+            </section>
+        </div>
+
+        <!-- ВКЛАДКА 2: ФОРМА -->
+        <div id="tabForm" class="tab-content">
+            <section>
+                <h2>Новая запись</h2>
+                <form id="appointmentForm" onsubmit="saveAppointment(event)">
+                    <div class="form-group">
+                        <label>Имя клиента</label>
+                        <input type="text" id="clientName" required>
+                    </div>
+                    <div class="grid-2 form-group">
+                        <div>
+                            <label>Дата</label>
+                            <input type="date" id="appDate" required>
+                        </div>
+                        <div style="position: relative;">
+                            <label>Время</label>
+                            <input type="text" id="appTime" required placeholder="00:00" autocomplete="off" onclick="toggleTimeMenu(event)" oninput="formatTimeInput(this)" maxlength="5">
+                            
+                            <div id="customTimeMenu" style="display: none; position: absolute; top: 62px; left: 0; width: 100%; max-height: 160px; overflow-y: auto; background: white; border: 1px solid #d1d5db; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 20;">
+                                <div style="padding: 6px 10px; font-size: 12px; font-weight: 600; color: #4f46e5; border-bottom: 1px solid #f3f4f6; background: #f9fafb;">Популярное время</div>
+                                <div onclick="selectTime('09:00')" style="padding: 8px 10px; font-size: 13px; cursor: pointer; border-bottom: 1px solid #f3f4f6;">09:00</div>
+                                <div onclick="selectTime('10:00')" style="padding: 8px 10px; font-size: 13px; cursor: pointer; border-bottom: 1px solid #f3f4f6;">10:00</div>
+                                <div onclick="selectTime('11:00')" style="padding: 8px 10px; font-size: 13px; cursor: pointer; border-bottom: 1px solid #f3f4f6;">11:00</div>
+                                <div onclick="selectTime('12:00')" style="padding: 8px 10px; font-size: 13px; cursor: pointer; border-bottom: 1px solid #f3f4f6;">12:00</div>
+                                <div onclick="selectTime('13:00')" style="padding: 8px 10px; font-size: 13px; cursor: pointer; border-bottom: 1px solid #f3f4f6;">13:00</div>
+                                <div onclick="selectTime('14:00')" style="padding: 8px 10px; font-size: 13px; cursor: pointer; border-bottom: 1px solid #f3f4f6;">14:00</div>
+                                <div onclick="selectTime('15:00')" style="padding: 8px 10px; font-size: 13px; cursor: pointer; border-bottom: 1px solid #f3f4f6;">15:00</div>
+                                <div onclick="selectTime('16:00')" style="padding: 8px 10px; font-size: 13px; cursor: pointer; border-bottom: 1px solid #f3f4f6;">16:00</div>
+                                <div onclick="selectTime('17:00')" style="padding: 8px 10px; font-size: 13px; cursor: pointer; border-bottom: 1px solid #f3f4f6;">17:00</div>
+                                <div onclick="selectTime('18:00')" style="padding: 8px 10px; font-size: 13px; cursor: pointer; border-bottom: 1px solid #f3f4f6;">18:00</div>
+                                <div onclick="selectTime('19:00')" style="padding: 8px 10px; font-size: 13px; cursor: pointer; border-bottom: 1px solid #f3f4f6;">19:00</div>
+                                <div onclick="selectTime('20:00')" style="padding: 8px 10px; font-size: 13px; cursor: pointer;">20:00</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid-3 form-group">
+                        <div>
+                            <label>Услуга</label>
+                            <input type="text" id="appService" required placeholder="">
+                        </div>
+                        <div>
+                            <label>Время (мин)</label>
+                            <select id="appDuration" required>
+                                <option value="30">30 мин</option>
+                                <option value="60" selected>1 час</option>
+                                <option value="90">1.5 часа</option>
+                                <option value="120">2 часа</option>
+                                <option value="150">2.5 часа</option>
+                                <option value="180">3 часа</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Цена (₽)</label>
+                            <input type="text" id="appPrice" required placeholder="0" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g, '')">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-main">✨ Записать клиента</button>
+                </form>
+            </section>
+
+            <section>
+                <h2>План на 10 дней</h2>
+                <div id="appointmentsList">
+                    <p style="text-align:center; color:#9ca3af; font-size:14px; padding:16px 0;">Записей пока нет</p>
+                </div>
+            </section>
+        </div>
+    </main>
+    <script>
         let db;
         let currentCalendarDate = new Date();
         const request = indexedDB.open("LocalClientsDB", 1);
@@ -203,22 +282,23 @@
 
         request.onsuccess = function(event) {
             db = event.target.result;
-            const dateInput = document.getElementById('appDate');
-            if (dateInput) {
-                const now = new Date();
-                const mStr = String(now.getMonth() + 1).padStart(2, '0');
-                const dStr = String(now.getDate()).padStart(2, '0');
-                dateInput.value = `${now.getFullYear()}-${mStr}-${dStr}`;
-            }
-            setTimeout(() => {
-                renderCalendar();
-                renderAppointments();
-            }, 50);
+            resetFormDate();
+            renderCalendar();
+            renderAppointments();
         };
 
         request.onerror = function() {
             alert("Ошибка запуска базы данных.");
         };
+
+        function resetFormDate() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            document.getElementById('appDate').value = `${year}-${month}-${day}`;
+            document.getElementById('appTime').value = '';
+        }
 
         function switchTab(tabName) {
             document.getElementById('tabCalendar').classList.remove('active');
@@ -234,6 +314,21 @@
                 document.getElementById('tabForm').classList.add('active');
                 document.getElementById('btnTabForm').classList.add('active');
             }
+        }
+
+        // НОВАЯ ФУНКЦИЯ: Меняет статус клиента (Обслужен / Не обслужен) при клике на галочку
+        function toggleStatus(id, checked) {
+            const transaction = db.transaction(["appointments"], "readwrite");
+            const store = transaction.objectStore("appointments");
+            const getReq = store.get(id);
+
+            getReq.onsuccess = function() {
+                const record = getReq.result;
+                record.done = checked; // Сохраняем галочку
+                store.put(record).onsuccess = function() {
+                    renderCalendar(); // Обновляем кассу на экране
+                };
+            };
         }
 
         function formatTimeInput(input) {
@@ -301,6 +396,9 @@
                 currentRow.appendChild(emptyCell);
             }
 
+            const today = new Date();
+            const selectedDateVal = document.getElementById('appDate').value;
+
             for (let day = 1; day <= totalDays; day++) {
                 if (currentRow.children.length === 7) {
                     tbody.appendChild(currentRow);
@@ -310,7 +408,6 @@
                 const cell = document.createElement('td');
                 cell.className = 'cal-cell';
                 
-                const today = new Date();
                 if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
                     cell.classList.add('today');
                 }
@@ -319,7 +416,6 @@
                 const dStr = String(day).padStart(2, '0');
                 const dateKey = `${year}-${mStr}-${dStr}`;
 
-                const selectedDateVal = document.getElementById('appDate').value;
                 if (selectedDateVal === dateKey) {
                     cell.classList.add('selected-day');
                     showDaySchedule(dateKey, list);
@@ -356,52 +452,223 @@
             const section = document.getElementById('dayScheduleSection');
             const title = document.getElementById('dayScheduleTitle');
             const listContainer = document.getElementById('dayHoursList');
+            const forecastBox = document.getElementById('cashForecast');
+            const doneBox = document.getElementById('cashDone');
             if (!section || !title || !listContainer) return;
 
             const dayApps = list.filter(item => item.date.trim() === dateKey);
             dayApps.sort((a, b) => a.time.localeCompare(b.time));
 
-            // Разрезаем дату YYYY-MM-DD и собираем в привычный ДД.ММ.ГГГГ
-			const [y, m, d] = dateKey.split('-');
-			const formattedDate = `${d}.${m}.${y}`;
-
-            title.innerText = `Расписание на ${formattedDate}`;
+            const [y, m, d] = dateKey.split('-');
+            title.innerText = `Расписание на ${d}.${m}.${y}`;
             section.style.display = 'block';
+
+            // НОВАЯ ЛОГИКА: Считаем деньги за день (Ожидается и Заработано)
+            let totalForecast = 0;
+            let totalDone = 0;
+
+            dayApps.forEach(item => {
+                if (item.done) {
+                    totalDone += item.price;
+                } else {
+                    totalForecast += item.price;
+                }
+            });
+
+            forecastBox.innerText = `${totalForecast} ₽`;
+            doneBox.innerText = `${totalDone} ₽`;
 
             if (dayApps.length === 0) {
                 listContainer.innerHTML = '<p style="text-align:center; color:#9ca3af; font-size:13px; padding:12px 0; margin:0;">На этот день записей нет</p>';
                 return;
             }
 
-                        listContainer.innerHTML = dayApps.map(item => `
-                <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px; background: #f8fafc; border-left: 4px solid #4a4e69; border-radius: 4px; border-top: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9;">
-                    <div>
-                        <span style="font-weight: 700; color: #70748c; font-size: 13px; margin-right: 8px;">${item.time}</span>
-                        <span style="font-weight: 600; color: #334155; font-size: 14px;">${item.clientName}</span>
-                        <div style="font-size: 12px; color: #64748b; margin-top: 2px;">${item.service}</div>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <span style="font-weight: 700; font-size: 13px; color: #4a4e69;">${item.price} ₽</span>
-                        <button onclick="deleteAppointment(${item.id})" class="btn-del" style="font-size: 16px;">✕</button>
-                    </div>
-                </div>
-            `).join('');
+            listContainer.innerHTML = dayApps.map(item => {
+                // Вычисляем время окончания процедуры для отображения на экране
+                const [h, min] = item.time.split(':').map(Number);
+                const endMinTotal = h * 60 + min + Number(item.duration || 60);
+                const endH = String(Math.floor(endMinTotal / 60) % 24).padStart(2, '0');
+                const endM = String(endMinTotal % 60).padStart(2, '0');
+                const endTimeStr = `${endH}:${endM}`;
 
+                return `
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px; background: #f8fafc; border-left: 4px solid #4a4e69; border-radius: 4px; border-top: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <!-- Чекбокс отметки выполнения услуги -->
+                            <input type="checkbox" class="checkbox-custom" ${item.done ? 'checked' : ''} onchange="toggleStatus(${item.id}, this.checked)">
+                            <div>
+                                <span style="font-weight: 700; color: #70748c; font-size: 12px; margin-right: 4px;">${item.time} - ${endTimeStr}</span>
+                                <span style="font-weight: 600; color: #334155; font-size: 14px; ${item.done ? 'text-decoration: line-through; color: #94a3b8;' : ''}">${item.clientName}</span>
+                                <div style="font-size: 12px; color: #64748b; margin-top: 2px;">${item.service} (${item.duration || 60} мин)</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-weight: 700; font-size: 13px; color: #4a4e69;">${item.price} ₽</span>
+                            <button onclick="deleteAppointment(${item.id})" class="btn-del" style="font-size: 16px;">✕</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
-                async function saveAppointment(event) {
+        async function renderCalendar() {
+            const tbody = document.getElementById('calendarTableBody');
+            const title = document.getElementById('calendarMonthTitle');
+            if (!tbody || !title) return;
+
+            tbody.innerHTML = '';
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+
+            const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+            title.innerText = `${monthNames[month]} ${year}`;
+
+            const firstDay = new Date(year, month, 1);
+            let startDay = firstDay.getDay();
+            if (startDay === 0) startDay = 6;
+            else startDay = startDay - 1;
+
+            const totalDays = new Date(year, month + 1, 0).getDate();
+
+            const transaction = db.transaction(["appointments"], "readonly");
+            const store = transaction.objectStore("appointments");
+            
+            const list = await new Promise((resolve) => {
+                const req = store.getAll();
+                req.onsuccess = () => resolve(req.result || []);
+                req.onerror = () => resolve([]);
+            });
+
+            let currentRow = document.createElement('tr');
+            
+            for (let i = 0; i < startDay; i++) {
+                const emptyCell = document.createElement('td');
+                emptyCell.className = 'cal-cell empty';
+                currentRow.appendChild(emptyCell);
+            }
+
+            const today = new Date();
+            const selectedDateVal = document.getElementById('appDate').value;
+
+            for (let day = 1; day <= totalDays; day++) {
+                if (currentRow.children.length === 7) {
+                    tbody.appendChild(currentRow);
+                    currentRow = document.createElement('tr');
+                }
+
+                const cell = document.createElement('td');
+                cell.className = 'cal-cell';
+                
+                if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
+                    cell.classList.add('today');
+                }
+
+                const mStr = String(month + 1).padStart(2, '0');
+                const dStr = String(day).padStart(2, '0');
+                const dateKey = `${year}-${mStr}-${dStr}`;
+
+                if (selectedDateVal === dateKey) {
+                    cell.classList.add('selected-day');
+                    showDaySchedule(dateKey, list);
+                }
+
+                const dayApps = list.filter(item => item.date.trim() === dateKey);
+
+                cell.onclick = function(e) {
+                    e.stopPropagation();
+                    document.getElementById('appDate').value = dateKey;
+                    renderCalendar();
+                };
+
+                cell.innerHTML = `<span style="font-size: 13px; font-weight: 600; color: #374151;">${day}</span>`;
+
+                if (dayApps.length > 0) {
+                    const indicator = document.createElement('div');
+                    indicator.className = 'cal-day-indicator';
+                    cell.appendChild(indicator);
+                }
+
+                currentRow.appendChild(cell);
+            }
+
+            while (currentRow.children.length < 7) {
+                const emptyCell = document.createElement('td');
+                emptyCell.className = 'cal-cell empty';
+                currentRow.appendChild(emptyCell);
+            }
+            tbody.appendChild(currentRow);
+        }
+        function showDaySchedule(dateKey, list) {
+            const section = document.getElementById('dayScheduleSection');
+            const title = document.getElementById('dayScheduleTitle');
+            const listContainer = document.getElementById('dayHoursList');
+            const forecastBox = document.getElementById('cashForecast');
+            const doneBox = document.getElementById('cashDone');
+            if (!section || !title || !listContainer) return;
+
+            const dayApps = list.filter(item => item.date.trim() === dateKey);
+            dayApps.sort((a, b) => a.time.localeCompare(b.time));
+
+            const [y, m, d] = dateKey.split('-');
+            title.innerText = `Расписание на ${d}.${m}.${y}`;
+            section.style.display = 'block';
+
+            let totalForecast = 0;
+            let totalDone = 0;
+
+            dayApps.forEach(item => {
+                if (item.done) {
+                    totalDone += item.price;
+                } else {
+                    totalForecast += item.price;
+                }
+            });
+
+            forecastBox.innerText = `${totalForecast} ₽`;
+            doneBox.innerText = `${totalDone} ₽`;
+
+            if (dayApps.length === 0) {
+                listContainer.innerHTML = '<p style="text-align:center; color:#9ca3af; font-size:13px; padding:12px 0; margin:0;">На этот день записей нет</p>';
+                return;
+            }
+
+            listContainer.innerHTML = dayApps.map(item => {
+                const [h, min] = item.time.split(':').map(Number);
+                const endMinTotal = h * 60 + min + Number(item.duration || 60);
+                const endH = String(Math.floor(endMinTotal / 60) % 24).padStart(2, '0');
+                const endM = String(endMinTotal % 60).padStart(2, '0');
+                const endTimeStr = `${endH}:${endM}`;
+
+                return `
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px; background: #f8fafc; border-left: 4px solid #4a4e69; border-radius: 4px; border-top: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <input type="checkbox" class="checkbox-custom" ${item.done ? 'checked' : ''} onchange="toggleStatus(${item.id}, this.checked)">
+                            <div>
+                                <span style="font-weight: 700; color: #70748c; font-size: 12px; margin-right: 4px;">${item.time} - ${endTimeStr}</span>
+                                <span style="font-weight: 600; color: #334155; font-size: 14px; ${item.done ? 'text-decoration: line-through; color: #94a3b8;' : ''}">${item.clientName}</span>
+                                <div style="font-size: 12px; color: #64748b; margin-top: 2px;">${item.service} (${item.duration || 60} мин)</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-weight: 700; font-size: 13px; color: #4a4e69;">${item.price} ₽</span>
+                            <button onclick="deleteAppointment(${item.id})" class="btn-del" style="font-size: 16px;">✕</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        async function saveAppointment(event) {
             event.preventDefault();
 
             const name = document.getElementById('clientName').value;
             const date = document.getElementById('appDate').value;
             const time = document.getElementById('appTime').value;
+            const duration = Number(document.getElementById('appDuration').value);
             const service = document.getElementById('appService').value;
             const price = document.getElementById('appPrice').value;
             const timeInput = document.getElementById('appTime');
 
-            // Сбрасываем красную рамку, если она была до этого
             timeInput.style.borderColor = '#cbd5e1';
 
-            // Открываем транзакцию, чтобы проверить существующие записи
             const transaction = db.transaction(["appointments"], "readwrite");
             const store = transaction.objectStore("appointments");
             
@@ -411,29 +678,43 @@
                 req.onerror = () => resolve([]);
             });
 
-            // Ищем, нет ли уже человека на эту же дату и это же время
-            const duplicate = list.find(item => item.date.trim() === date.trim() && item.time.trim() === time.trim());
+            const [newH, newM] = time.split(':').map(Number);
+            const newStart = newH * 60 + newM;
+            const newEnd = newStart + duration;
 
-            if (duplicate) {
-                // Если нашли дубль — блокируем запись и ругаемся
-                alert(`⚠️ Ошибка! Время ${time} на эту дату уже занято клиентом: ${duplicate.clientName}`);
-                timeInput.style.borderColor = '#f43f5e'; // Красим поле времени в красный цвет
+            const conflict = list.find(item => {
+                if (item.date.trim() !== date.trim()) return false;
+
+                const [existH, existM] = item.time.split(':').map(Number);
+                const existStart = existH * 60 + existM;
+                const existEnd = existStart + Number(item.duration || 60);
+
+                return (newStart < existEnd && newEnd > existStart);
+            });
+
+            if (conflict) {
+                const [exH, exM] = conflict.time.split(':').map(Number);
+                const endMTotal = exH * 60 + exM + Number(conflict.duration || 60);
+                const freeH = String(Math.floor(endMTotal / 60) % 24).padStart(2, '0');
+                const freeM = String(endMTotal % 60).padStart(2, '0');
+
+                alert(`⚠️ Накладка! Время занято клиентом ${conflict.clientName}. Процедура (${conflict.service}) длится с ${conflict.time} до ${freeH}:${freeM}. Выберите другое время.`);
+                timeInput.style.borderColor = '#f43f5e';
                 timeInput.focus();
-                return; // Выходим из функции, ничего не сохраняя
+                return;
             }
 
-            // Если всё чисто — сохраняем
             const newRecord = {
                 clientName: name,
                 date: date.trim(),
                 time: time,
+                duration: duration,
                 service: service,
-                price: Number(price)
+                price: Number(price),
+                done: false
             };
 
-            const addRequest = store.add(newRecord);
-
-            addRequest.onsuccess = function() {
+            store.add(newRecord).onsuccess = function() {
                 document.getElementById('clientName').value = '';
                 document.getElementById('appTime').value = '';
                 document.getElementById('appService').value = '';
@@ -443,8 +724,7 @@
             };
         }
 
-
-                function renderAppointments() {
+        function renderAppointments() {
             const listContainer = document.getElementById('appointmentsList');
             if (!listContainer) return;
 
@@ -458,9 +738,8 @@
                 const today = new Date();
                 today.setHours(0,0,0,0);
                 
-                // ИСПРАВЛЕНО: Теперь считаем ровно на 10 дней вперед
                 const nextPeriod = new Date();
-                nextWeek = nextPeriod.setDate(today.getDate() + 10);
+                const nextWeek = nextPeriod.setDate(today.getDate() + 10);
                 const endPeriod = new Date(nextWeek);
                 endPeriod.setHours(23,59,59,999);
 
@@ -477,15 +756,16 @@
                 }
 
                 listContainer.innerHTML = filteredList.map(item => {
-                    const formattedDate = new Date(item.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+                    const [y, m, d] = item.date.split('-');
+                    const formattedDate = `${d}.${m}.${y}`;
                     return `
-                        <div class="card">
+                        <div class="card" style="${item.done ? 'opacity: 0.6; background: #f1f5f9;' : ''}">
                             <div>
                                 <div style="display: flex; align-items: center;">
                                     <span class="badge">${formattedDate} в ${item.time}</span>
-                                    <span class="client-name">${item.clientName}</span>
+                                    <span class="client-name" style="${item.done ? 'text-decoration: line-through;' : ''}">${item.clientName}</span>
                                 </div>
-                                <p class="service-name">${item.service}</p>
+                                <p class="service-name">${item.service} (${item.duration || 60} мин)</p>
                             </div>
                             <div style="display: flex; align-items: center;">
                                 <span class="price">${item.price} ₽</span>
@@ -497,13 +777,11 @@
             };
         }
 
-
         function deleteAppointment(id) {
             if (confirm("Удалить эту запись?")) {
                 const transaction = db.transaction(["appointments"], "readwrite");
                 const store = transaction.objectStore("appointments");
-                const deleteRequest = store.delete(id);
-                deleteRequest.onsuccess = function() {
+                store.delete(id).onsuccess = function() {
                     renderAppointments();
                     renderCalendar();
                 };
@@ -513,10 +791,8 @@
         function exportData() {
             const transaction = db.transaction(["appointments"], "readonly");
             const store = transaction.objectStore("appointments");
-            const getAllRequest = store.getAll();
-
-            getAllRequest.onsuccess = function() {
-                const allData = getAllRequest.result;
+            store.getAll().onsuccess = function(e) {
+                const allData = e.target.result;
                 if (allData.length === 0) {
                     alert("База данных пуста!");
                     return;
@@ -530,57 +806,40 @@
                 URL.revokeObjectURL(url);
             };
         }
-		
-		        function exportToExcel() {
+
+        function exportToExcel() {
             const transaction = db.transaction(["appointments"], "readonly");
             const store = transaction.objectStore("appointments");
-            const getAllRequest = store.getAll();
-
-            getAllRequest.onsuccess = function() {
-                const allData = getAllRequest.result;
+            store.getAll().onsuccess = function(e) {
+                const allData = e.target.result;
                 if (allData.length === 0) {
-                    alert("База данных пуста, нечего выгружать в Excel!");
+                    alert("База данных пуста!");
                     return;
                 }
-
-                // Сортируем записи по дате и времени перед выгрузкой
                 allData.sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time));
-
-                // Создаем заголовки колонок для Excel
-                let csvContent = "Дата;Время;Имя клиента;Услуга;Цена (₽)\(\r\\)n";
-
-                // Заполняем таблицу строками
+                let csvContent = "Дата;Время;Длительность;Имя клиента;Услуга;Цена (₽);Статус\(\r\\)n";
                 allData.forEach(item => {
-                    // Переводим дату в наш родной формат ДД.ММ.ГГГГ для экселя
                     const [y, m, d] = item.date.split('-');
                     const formattedDate = `${d}.${m}.${y}`;
-                    
-                    // Формируем строку (разделяем точкой с запятой, чтобы Excel понял структуру)
-                    csvContent += `${formattedDate};${item.time};${item.clientName};${item.service};${item.price}\r\n`;
+                    const statusStr = item.done ? "Выполнено" : "Ожидается";
+                    csvContent += `${formattedDate};${item.time};${item.duration || 60} мин;${item.clientName};${item.service};${item.price};${statusStr}\r\n`;
                 });
-
-                // Добавляем специальный маркер (BOM), чтобы Excel сразу открыл файл в правильной кодировке UTF-8 и русский текст не превратился в кракозябры
                 const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                
-                // Название файла, например: clients_report_10.10.2026.csv
                 const now = new Date();
                 const mStr = String(now.getMonth() + 1).padStart(2, '0');
                 const dStr = String(now.getDate()).padStart(2, '0');
                 a.download = `clients_report_${dStr}.${mStr}.${now.getFullYear()}.csv`;
-                
                 a.click();
                 URL.revokeObjectURL(url);
             };
         }
 
-
         function importData(event) {
             const file = event.target.files;
             if (!file) return;
-
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
@@ -589,16 +848,13 @@
                         alert("Неверный формат файла бэкапа!");
                         return;
                     }
-
                     if (confirm(`Добавить ${importedItems.length} записей из файла?`)) {
                         const transaction = db.transaction(["appointments"], "readwrite");
                         const store = transaction.objectStore("appointments");
-
                         importedItems.forEach(item => {
                             delete item.id;
                             store.add(item);
                         });
-
                         transaction.oncomplete = function() {
                             alert("Все записи успешно восстановлены!");
                             renderAppointments();
