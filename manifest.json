@@ -1,0 +1,9 @@
+{
+  "name": "Запись Клиентов",
+  "short_name": "Запись",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#f1f5f9",
+  "theme_color": "#4a4e69",
+  "orientation": "portrait"
+}
