@@ -63,6 +63,18 @@
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
 </style>
+	    <!-- Связываем приложение с файлом настроек офлайна -->
+    <link rel="manifest" href="manifest.json">
+    
+    <script>
+        // Регистрируем офлайн-менеджер (Service Worker)
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log('Офлайн-режим готов!'))
+                .catch(err => console.error('Ошибка офлайна:', err));
+        }
+    </script>
+
 </head>
 <body>
     <!-- ИСПРАВЛЕННАЯ ШАПКА: Все кнопки в один ряд в правом углу -->
